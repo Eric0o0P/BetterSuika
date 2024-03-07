@@ -12,12 +12,11 @@ public class PlayerControl : MonoBehaviour
     private SpawnManager spawnManager;
     private PlayerControl hitFruitControl;
     private GameObject hitFruit;
-    private Vector3 test = new Vector3(1.0f, 0.0f,1.0f);
+
     // Start is called before the first frame update
     void Start()
     {
         fruitRb = GetComponent<Rigidbody>();
-        fruitRb.useGravity = false;
 
         //accessing spawn manager to assign an int for colour to check when coliding
         spawnManager = GameObject.Find("SpawnPoint").GetComponent<SpawnManager>();
@@ -35,6 +34,8 @@ public class PlayerControl : MonoBehaviour
 
     private void UserControl()
     {
+        fruitRb.useGravity = false;
+
         float horizontalInput = Input.GetAxis("Horizontal");
         transform.Translate(Vector3.right * horizontalInput * moveSpeed * Time.deltaTime);
 
@@ -54,11 +55,12 @@ public class PlayerControl : MonoBehaviour
             hitFruit = collision.gameObject;
             if(hitFruitControl.arrayNumber == arrayNumber)
             {
+                int newFruitTier = arrayNumber++;
+                Instantiate(spawnManager.fruitPrefabs[newFruitTier], GenerateSpawnPos(), transform.rotation);
+                
+
                 Destroy(gameObject);
                 Destroy(hitFruit);
-
-                int newFruitTier = arrayNumber++;
-                Instantiate(spawnManager.fruitPrefabs[newFruitTier], test, transform.rotation);
             }
         }
 
