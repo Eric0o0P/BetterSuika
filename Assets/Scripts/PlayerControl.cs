@@ -10,9 +10,9 @@ public class PlayerControl : MonoBehaviour
     public bool hasCollided = false;
     public int arrayNumber;
     private SpawnManager spawnManager;
-    public bool colidedWithColor = false;
     private PlayerControl hitFruitControl;
     private GameObject hitFruit;
+    private Vector3 test = new Vector3(1.0f, 0.0f,1.0f);
     // Start is called before the first frame update
     void Start()
     {
@@ -54,14 +54,30 @@ public class PlayerControl : MonoBehaviour
             hitFruit = collision.gameObject;
             if(hitFruitControl.arrayNumber == arrayNumber)
             {
-                
+                Destroy(gameObject);
+                Destroy(hitFruit);
+
+                int newFruitTier = arrayNumber++;
+                Instantiate(spawnManager.fruitPrefabs[newFruitTier], test, transform.rotation);
             }
         }
+
+        //detecting 1st collision with ground or fruit
         if(collision.gameObject.CompareTag("fruit") || (collision.gameObject.CompareTag("ground")))
-            //detecting 1st collision
+            
             for(int i = 0; i <= 1; i++)
             {
                 hasCollided = true;
             }
+    }
+
+    private Vector3 GenerateSpawnPos()
+    {
+        float spawnposX = hitFruit.transform.position.x - transform.position.x;
+        float spawnposY = hitFruit.transform.position.y - transform.position.y;
+
+        Vector3 newSpawnPoint = new Vector3(spawnposX, spawnposY, transform.position.z);
+
+        return newSpawnPoint;
     }
 }
