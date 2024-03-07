@@ -55,12 +55,13 @@ public class PlayerControl : MonoBehaviour
             if(hitFruitControl.arrayNumber == arrayNumber)
             {
                 
-            }    
+            }
         }
-        //detecting 1st collision
-        for(int i = 0; i <= 1; i++)
-        {
-            hasCollided = true;
-        }
+        if(collision.gameObject.CompareTag("fruit") || (collision.gameObject.CompareTag("ground")))
+            //detecting 1st collision
+            for(int i = 0; i <= 1; i++)
+            {
+                hasCollided = true;
+            }
     }
 }

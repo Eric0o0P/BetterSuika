@@ -4,13 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Red
-  - Orange
-  - Yellow
-  - Green
-  - Blue
-  - Indigo
-  - Violet
+  - fruit
+  - ground
   layers:
   - Default
   - TransparentFX
