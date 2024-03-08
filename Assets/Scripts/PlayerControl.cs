@@ -21,12 +21,13 @@ public class PlayerControl : MonoBehaviour
         //accessing spawn manager to assign an int for colour to check when coliding
         spawnManager = GameObject.Find("SpawnPoint").GetComponent<SpawnManager>();
         arrayNumber = spawnManager.smallFruit;
+        fruitRb.useGravity = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(canControl)
+        if(canControl && transform.position.y > 27f)
         {
             UserControl();
         }
@@ -55,12 +56,19 @@ public class PlayerControl : MonoBehaviour
             hitFruit = collision.gameObject;
             if(hitFruitControl.arrayNumber == arrayNumber)
             {
-                int newFruitTier = arrayNumber++;
-                Instantiate(spawnManager.fruitPrefabs[newFruitTier], GenerateSpawnPos(), transform.rotation);
+                int thisID = gameObject.GetInstanceID();
+                int otherID = hitFruit.gameObject.GetInstanceID();
+
+                if(thisID > otherID)
+                {
+                    int newFruitTier = arrayNumber + 1;
+                    Vector3 newFruitPos = (transform.position + hitFruit.transform.position) / 2f;
+                    Instantiate(spawnManager.fruitPrefabs[newFruitTier], newFruitPos, transform.rotation);
                 
 
-                Destroy(gameObject);
-                Destroy(hitFruit);
+                    Destroy(gameObject);
+                    Destroy(hitFruit);
+                }
             }
         }
 
@@ -73,13 +81,4 @@ public class PlayerControl : MonoBehaviour
             }
     }
 
-    private Vector3 GenerateSpawnPos()
-    {
-        float spawnposX = hitFruit.transform.position.x - transform.position.x;
-        float spawnposY = hitFruit.transform.position.y - transform.position.y;
-
-        Vector3 newSpawnPoint = new Vector3(spawnposX, spawnposY, transform.position.z);
-
-        return newSpawnPoint;
-    }
 }
